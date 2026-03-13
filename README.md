@@ -87,4 +87,4 @@ We are looking for the first **50 Seed Partners** to define the future of the Ac
 
 * **Inquiries:** [ipanda666999@gmail.com]
 * **Twitter:** [ @pandyBuilds ]
-* **Updates:** Follow this repository for the upcoming landing page at lifelikegen.com.
+* **Updates:** Follow this repository for the upcoming landing page at .
