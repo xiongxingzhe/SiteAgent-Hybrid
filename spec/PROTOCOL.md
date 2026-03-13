@@ -110,8 +110,7 @@ Allows platform owners to define custom business logic and regional compliance w
 ## 6. Security & Authority Downgrade (ADDE)
 This core algorithm ensures safety by monitoring Semantic Drift ($S_{offset}$) between the current UI and the protocol definition.
 
-![Security & Authority Downgrade (ADDE) Formula](./path/to/formula_render.jpg)
-
+![Security & Authority Downgrade (ADDE) Formula](./formula_render.jpg)
 
 © 2026 SiteAgent Hybrid Project. Distributed under the MIT License.
 
