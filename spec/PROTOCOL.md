@@ -112,5 +112,7 @@ This core algorithm ensures safety by monitoring Semantic Drift ($S_{offset}$) b
 
 ![Security & Authority Downgrade (ADDE) Formula](./formula_render.jpg)
 
+
+
 © 2026 SiteAgent Hybrid Project. Distributed under the MIT License.
 
