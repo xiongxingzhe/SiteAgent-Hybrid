@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SiteAgent Hybrid | The Action Protocol for the Agentic Web</title>
+    <style>
+        :root {
+            --bg-color: #050505;
+            --text-color: #ffffff;
+            --accent-color: #3b82f6;
+            --secondary-text: #888888;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 600px;
+            padding: 20px;
+        }
+
+        /* 灵动胶囊动画效果 */
+        .capsule {
+            display: inline-block;
+            background: #111;
+            border: 1px solid #222;
+            padding: 8px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            color: var(--secondary-text);
+            margin-bottom: 2rem;
+            animation: breathe 3s ease-in-out infinite;
+        }
+
+        @keyframes breathe {
+            0%, 100% { border-color: #222; box-shadow: 0 0 0px rgba(59, 130, 246, 0); }
+            50% { border-color: var(--accent-color); box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin: 0 0 1rem 0;
+            letter-spacing: -1px;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: var(--secondary-text);
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        .links {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-weight: 500;
+            border-bottom: 1px solid #333;
+            padding-bottom: 4px;
+            transition: all 0.2s;
+        }
+
+        a:hover {
+            color: var(--accent-color);
+            border-color: var(--accent-color);
+        }
+
+        .footer {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.8rem;
+            color: #333;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="capsule">agents.json v1.1 protocol_active</div>
+        
+        <h1>SiteAgent Hybrid</h1>
+        <p>The Action Protocol for the Agentic Web. <br>Mapping the last mile of human-AI collaboration.</p>
+
+        <div class="links">
+            <a href="https://github.com/你的用户名/SiteAgent-Hybrid">GitHub</a>
+            <a href="mailto:你的邮箱">Contact</a>
+        </div>
+    </div>
+
+    <div class="footer">
+        LifelikeGen &copy; 2026
+    </div>
+
+</body>
+</html>
