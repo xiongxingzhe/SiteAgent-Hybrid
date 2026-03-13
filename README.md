@@ -68,6 +68,8 @@ Standardizing how AI interprets web actions. Now with **Orchestration** support:
 }
 
 ```
+
+## 📖 **Full Technical Specification:** [Read the agents.json v1.1 Draft here](./spec/PROTOCOL.md)
 ---
 
 ## 📅 Roadmap
@@ -86,5 +88,4 @@ Standardizing how AI interprets web actions. Now with **Orchestration** support:
 We are looking for the first **50 Seed Partners** to define the future of the Actionable Web.
 
 * **Inquiries:** [ipanda666999@gmail.com]
-* **Twitter:** [ @pandyBuilds ]
-
+* **Twitter:** [@pandyBuilds](https://x.com/pandyBuilds)
