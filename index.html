@@ -3,112 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SiteAgent Hybrid | The Action Protocol for the Agentic Web</title>
+    <title>SiteAgent Hybrid | The Action Protocol</title>
     <style>
         :root {
-            --bg-color: #050505;
+            --bg-color: #020202;
             --text-color: #ffffff;
             --accent-color: #3b82f6;
-            --secondary-text: #888888;
+            --secondary-text: #666;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: "Inter", -apple-system, sans-serif;
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            cursor: crosshair;
+        }
+
+        /* 增加一个扫描线效果 */
+        body::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+            opacity: 0.1;
+            animation: scan 4s linear infinite;
+        }
+
+        @keyframes scan {
+            0% { top: -5%; }
+            100% { top: 105%; }
         }
 
         .container {
             text-align: center;
-            max-width: 600px;
-            padding: 20px;
+            z-index: 10;
         }
 
-        /* 灵动胶囊动画效果 */
         .capsule {
             display: inline-block;
-            background: #111;
-            border: 1px solid #222;
-            padding: 8px 24px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid #333;
+            padding: 8px 20px;
             border-radius: 50px;
-            font-size: 0.9rem;
-            color: var(--secondary-text);
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: var(--accent-color);
             margin-bottom: 2rem;
-            animation: breathe 3s ease-in-out infinite;
+            backdrop-filter: blur(10px);
+            transition: all 0.5s;
         }
 
-        @keyframes breathe {
-            0%, 100% { border-color: #222; box-shadow: 0 0 0px rgba(59, 130, 246, 0); }
-            50% { border-color: var(--accent-color); box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+        /* 模拟日志流 */
+        #log-stream {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #444;
+            height: 20px;
+            margin-top: 10px;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 3.5rem;
             font-weight: 800;
-            margin: 0 0 1rem 0;
-            letter-spacing: -1px;
-        }
-
-        p {
-            font-size: 1.2rem;
-            color: var(--secondary-text);
-            line-height: 1.6;
-            margin-bottom: 2.5rem;
+            margin: 0;
+            letter-spacing: -2px;
+            background: linear-gradient(to bottom, #fff, #888);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         .links {
-            display: flex;
-            gap: 20px;
-            justify-content: center;
+            margin-top: 3rem;
+            display: flex; gap: 30px; justify-content: center;
         }
 
         a {
             color: var(--text-color);
             text-decoration: none;
-            font-weight: 500;
-            border-bottom: 1px solid #333;
-            padding-bottom: 4px;
-            transition: all 0.2s;
+            font-size: 0.9rem;
+            opacity: 0.5;
+            transition: 0.3s;
         }
 
-        a:hover {
-            color: var(--accent-color);
-            border-color: var(--accent-color);
-        }
+        a:hover { opacity: 1; color: var(--accent-color); }
 
-        .footer {
+        /* 背景装饰 */
+        .glow {
             position: absolute;
-            bottom: 40px;
-            font-size: 0.8rem;
-            color: #333;
-            letter-spacing: 2px;
-            text-transform: uppercase;
+            width: 40vw; height: 40vw;
+            background: radial-gradient(circle, rgba(59, 130, 246, 0.05) 0%, transparent 70%);
+            pointer-events: none;
         }
     </style>
 </head>
 <body>
-
+    <div class="glow" id="mouse-glow"></div>
+    
     <div class="container">
-        <div class="capsule">agents.json v1.1 protocol_active</div>
-        
+        <div class="capsule" id="status-capsule">● AGENT_LISTENING</div>
         <h1>SiteAgent Hybrid</h1>
-        <p>The Action Protocol for the Agentic Web. <br>Mapping the last mile of human-AI collaboration.</p>
-
+        <div id="log-stream">initializing semantic handshake...</div>
+        
         <div class="links">
-            <a href="https://github.com/你的用户名/SiteAgent-Hybrid">GitHub</a>
-            <a href="mailto:你的邮箱">Contact</a>
+            <a href="https://github.com/xiongxingzhe/SiteAgent-Hybrid">SOURCE_CODE</a>
+            <a href="mailto:ipanda666999@gmail.com">CONTACT_SYSTEM</a>
         </div>
     </div>
 
-    <div class="footer">
-        LifelikeGen &copy; 2026
-    </div>
+    <script>
+        const logs = [
+            "fetching agents.json...",
+            "analyzing DOM structures...",
+            "S_offset within limits (2.4%)",
+            "ready for cross-domain handoff",
+            "awaiting codex integration",
+            "blind_mode: active"
+        ];
+        let i = 0;
+        setInterval(() => {
+            document.getElementById('log-stream').innerText = logs[i % logs.length];
+            i++;
+        }, 3000);
 
+        // 鼠标跟随效果
+        document.addEventListener('mousemove', (e) => {
+            const glow = document.getElementById('mouse-glow');
+            glow.style.left = e.clientX - glow.offsetWidth/2 + 'px';
+            glow.style.top = e.clientY - glow.offsetHeight/2 + 'px';
+        });
+    </script>
 </body>
 </html>
