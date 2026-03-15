@@ -1,91 +1,94 @@
-# SiteAgent-Hybrid
-An open-source protocol and engine defining agents.json for the Agentic Web. Enables secure, cross-domain AI-human collaboration through semantic-aware guidance and automation.
+# 🌐 SiteAgent: The Action Protocol for the Agentic Web
 
-# 🚀 SiteAgent Hybrid: The Action Protocol for the Agentic Web
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![Version](https://img.shields.io/badge/version-2.0.0--beta-green.svg)]()
+[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)]()
 
-[MIT License] | [v1.0-alpha] | [PRs Welcome]
+> **"Don't let AI guess your UI. Give it a map."**
 
-> **Stop building manuals. Start building pilots.** > SiteAgent Hybrid is an open-source framework and protocol (`agents.json`) that transforms isolated web silos into a seamless, machine-readable action network.
+SiteAgent is an intent-driven execution protocol and Web SDK designed for B2B SaaS, complex web applications, and high-frequency workflows.
 
----
+In the emerging Agent Economy, traditional Graphical User Interfaces (GUIs) have become a massive barrier for machine execution. Relying on Vision-Language Models (VLMs) to visually "guess" and navigate complex web pages is brittle, expensive, and insecure—especially when dealing with cross-domain configurations (e.g., Apple Developer to Supabase) or sensitive authentication.
 
-## 💡 Why SiteAgent?
-
-In the era of AI Agents (like OpenAI Operator or Claude), the web is still a "Black Box":
-
-* **The Silo Problem**: Complex tasks often span multiple platforms (e.g., Apple Dev -> Supabase), causing users and agents to lose context.
-* **The Trust Wall**: Automated agents lack a standardized "handover" mechanism for sensitive legal or financial nodes.
-* **UI Fragility**: Minor CSS changes break traditional automation scripts.
-
-**SiteAgent Hybrid** fixes this by providing a semantic "Action Map" that both humans and AI can follow.
+**SiteAgent's mission is to lay down a machine-readable infrastructure layer for every website on the internet.**
 
 ---
 
-## ✨ Core Features
+## ✨ Why SiteAgent?
 
-### 1. 🏝️ SiteAgent Capsule (The "Dynamic Island")
-A minimalist, state-aware UI component that follows the user across domains.
-* **Silent Mode**: Monitoring and protecting in the background.
-* **Executing Mode**: Smoothly performing automated tasks.
-* **Handover Mode**: Elegantly pausing to request human intervention for critical steps.
+By integrating the lightweight SiteAgent SDK and dropping an `agents.json` protocol file into your root directory, your platform instantly unlocks the following capabilities:
 
-### 2. ⚡ Cross-Domain Orchestration (The "Handoff")
-**The Killer Feature.** SiteAgent persists task context across different websites.
-* **Example**: Moving from *Apple Developer* to *Supabase* to fetch a Secret Key. The Capsule stays active, guides the user through the third-party site, and provides a "One-Click Return" to the original task.
-
-### 3. 🛡️ Authority Downgrade Decision Engine (ADDE)
-A smart safety-first algorithm that calculates semantic drift:
-
-$$Mode = \text{Agent} \to \text{Guide if } (S_{offset} \geq \text{Threshold} \lor \text{Task} = \text{Critical})$$
-
-Ensures **100% compliance** and user control at high-risk nodes.
+* 🤖 **A2A (Agent-to-Agent) Native Integration**: Allow external AI agents (like OpenAI Operator or open-source models) to interact directly with your app's workflow via a standard API, bypassing fragile DOM rendering entirely.
+* 🚀 **F-Mode (Force / Headless Execution)**: Users state their intent, and the system extracts parameters via a local, encrypted form. SiteAgent then executes the sequence headless in milliseconds, ensuring sensitive data (like API keys) never hits external LLM networks.
+* 🧭 **D-Mode (Guide / Immersive Handoff)**: For scenarios requiring human oversight, the system gracefully falls back to a visual guide. It uses dynamic spotlights and anti-error intercepts to walk users through complex UI mazes step-by-step.
+* 🛡️ **ADDE (Authority Downgrade Decision Engine)**: When encountering high-risk actions (e.g., asset transfers, downloading secure keys), the system forces a downgrade from F-Mode to a human-in-the-loop confirmation, ensuring absolute safety.
+* 🧬 **Drift Detection & Self-Healing ($S_{offset}$)**: Say goodbye to broken scripts after UI updates. By calculating semantic drift and utilizing a lightweight fallback VLM, SiteAgent automatically re-anchors targets and silently patches the protocol when your DOM structure changes.
 
 ---
 
-## 📄 The `agents.json` Protocol (v1.1)
+## 🏗️ Core Architecture: One Protocol, Dual-Track Execution
 
-Standardizing how AI interprets web actions. Now with **Orchestration** support:
+The heart of SiteAgent is the `agents.json` file. It doesn't just tell machines how to click (F-Mode); it also instructs the UI on how to guide humans (D-Mode).
+
+**Example: Requesting an Auth Key in Apple Developer Console**
 
 ```json
 {
-  "intent": "apple_auth_setup",
-  "steps": [
-    {
-      "id": "init_apple",
-      "action": "GUIDE",
-      "description": "Start configuration on Apple."
-    },
-    {
-      "id": "fetch_key",
-      "type": "HANDOFF",
-      "target_domain": "supabase.com",
-      "context_anchor": {
-        "source": "apple_connect",
-        "needed": ["callback_url"]
-      }
-    }
-  ]
+  "step_id": "input_key_name",
+  "description": "Input the desired key name",
+  "locator": {
+    "selector": "input#key-name-input",
+    "nearby_text": "Enter a name for your key." // Crucial for Drift Detection and Self-Healing
+  },
+  "f_mode": {
+    "action": "input",
+    "value": "{{parameters.key_name}}" // Headless parameter injection
+  },
+  "d_mode": {
+    "action": "spotlight_input",
+    "guide_text": "Please enter your desired key name here, e.g., 'Supabase Auth'." // UI rendering for human guidance
+  }
 }
-
 ```
+## 🚀 Quick Start
+Bringing SiteAgent to your SaaS platform takes just two steps:
 
-## 📖 **Full Technical Specification:** [Read the agents.json v1.1 Draft here](./spec/PROTOCOL.md)
----
+1. Install the SDK
+Install via npm or include it directly in your HTML:
+<script type="module" src="[https://cdn.jsdelivr.net/npm/@siteagent/widget](https://cdn.jsdelivr.net/npm/@siteagent/widget)"></script>
 
-## 📅 Roadmap
-[x] v0.1: Protocol Definition (agents.json v1.1).
+2. Initialize the Advisor Gateway
+import { SiteAgent } from '@siteagent/widget';
 
-[ ] v0.5: Open-source guide-runner.js with Semantic Self-Healing.
+const agent = new SiteAgent({
+  protocolPath: '/agents.json', // Path to your machine-readable protocol
+  theme: 'dark',
+  onHandoff: (context) => {
+    // Handle cross-domain task continuation (e.g., carrying Apple Key ID to Supabase)
+    console.log("Cross-domain handoff initiated:", context);
+  }
+});
 
-[ ] v0.8: SiteAgent Recorder - A browser extension to "Record once, generate roadmaps everywhere."
+agent.mount('#agent-root');
 
-[ ] v1.0: Full Cross-Domain support for the "Golden Corridor" (Apple/Stripe/Supabase/AWS).        
+## 🗺️ Roadmap
+[x] v1.0: Client-side action mapping script and basic cross-domain context.
 
----
+[x] v2.0 (Current): B2B protocol standardization (F/D dual-track, A2A interface).
 
-## 🤝 Join the Movement
+[ ] v2.1: Release Context Anchor relay service for seamless cross-domain handoffs.
 
-We are looking for the first **50 Seed Partners** to define the future of the Actionable Web.
+[ ] v2.5: Open-source the Drift Detection engine and auto-recording generator (via rrweb).
 
-* **Inquiries:** [ipanda666999@gmail.com]
-* **Twitter:** [@pandyBuilds](https://x.com/pandyBuilds)
+[ ] v3.0: Build a global agents.json registry for major SaaS platforms.
+
+## 🤝 Contributing
+We believe the future of the internet belongs to an intent-driven Agent Economy. If you are a SaaS developer, a solopreneur, or simply passionate about the next generation of human-computer interaction, we'd love your help!
+
+Fork the repository
+
+Submit an Issue or PR
+
+Help us map and adapt agents.json for the world's most vital websites
+
+License: MIT
