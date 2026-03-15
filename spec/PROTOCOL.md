@@ -1,118 +1,108 @@
-# 📄 agents.json: Machine-Readable Action Protocol (Standard Draft v1.1)
-
-## 1. Protocol Metadata
-Defines the core identity and compatibility of the site. This acts as the "Passport" for external AI Agents to recognize and interact with the platform.
-
-```json
 {
-  "protocol_info": {
-    "name": "SiteAgent Action Protocol",
-    "version": "1.1.0",
-    "schema_version": "2026-03-13",
-    "last_updated": "2026-03-13T10:00:00Z"
-  },
-  "site_identity": {
-    "site_name": "Apple Developer Connect",
+  "siteagent_schema": "2.0",
+  "metadata": {
     "domain": "developer.apple.com",
-    "security_tier": "High"
-  }
-}
-```
-## 2. Intent & Atomic ActionsMaps 
-ambiguous UI elements to definitive semantic actions, enabling deterministic execution for LLMs.
-
-risk_level: Determines execution mode. If $Risk\_Level \geq High$, the system forces "Guide Mode" (Human-in-the-loop).
-
-visibility: Privacy instructions. In Blind mode, sensitive data is processed in-memory and wiped immediately after execution to ensure user privacy.
-
-```json
-"intents": [
-  {
-    "id": "enroll_developer_program",
-    "description": "Enroll in the Apple Individual Developer Program",
-    "workflow": [
-      {
-        "step_id": "select_entity",
-        "action_type": "DOM_SELECT",
-        "semantic_label": "entity_type_dropdown",
-        "expected_values": ["Individual", "Company"],
-        "automation_allowed": true
-      },
-      {
-        "step_id": "identity_verification",
-        "action_type": "HUMAN_SIGNATURE_REQUIRED",
-        "visibility": "Visible",
-        "risk_level": "High",
-        "description": "Requires legal signature. Mode must switch to human-guided for liability."
-      }
-    ]
-  }
-]
-```
-## 3. Cross-Domain Orchestration (v1.1 Feature)
-Handles "Handoff" tasks across different platforms—the key to bridging the web's silos and maintaining task continuity.
-
-HANDOFF: Defines the logic for leaving the current domain and initiating a task on a third-party site.
-
-context_anchor: Persistent task data that travels with the agent to the destination site to prevent context loss.
-
-```json
-"orchestration": {
-  "external_dependencies": [
+    "service_name": "Apple Developer Console",
+    "a2a_endpoint": "https://developer.apple.com/.well-known/agent-api"
+  },
+  "intents": [
     {
-      "step_id": "fetch_supabase_key",
-      "type": "HANDOFF",
-      "target_domain": "supabase.com",
-      "trigger_action": "REDIRECT_OR_NEW_TAB",
-      "context_anchor": {
-        "source_task": "apple_auth_config",
-        "required_fields": ["callback_url", "client_secret"]
+      "intent_id": "generate_auth_key",
+      "intent_name": "生成并下载鉴权密钥 (Auth Key)",
+      "description": "为推送通知 (APNs) 或第三方集成 (如 Supabase) 创建新的密钥并下载 .p8 文件。",
+      
+      // 阶段 1：任务所需参数 (Advisor A 提取 / 隐私表单 Form 2)
+      "parameters": {
+        "key_name": {
+          "type": "string",
+          "description": "密钥的自定义名称",
+          "required": true
+        },
+        "enable_apns": {
+          "type": "boolean",
+          "description": "是否开启 Apple Push Notification 服务",
+          "default": true
+        }
       },
-      "guide_hint": "Navigating to Supabase to retrieve keys. SiteAgent will continue guidance at the destination."
+
+      // 阶段 2：执行工作流 (F模式与D模式的统一编排)
+      "workflow": [
+        {
+          "step_id": "nav_to_keys",
+          "description": "导航到证书与密钥管理页面",
+          // 结构感知引擎 (Drift Monitor)：多维立体定位
+          "locator": {
+            "url_pattern": "/account/resources/authkeys/list",
+            "semantic_label": "Keys Menu Item",
+            "fallback_xpath": "//a[contains(text(), 'Keys')]"
+          },
+          // F-Mode (代办)：直接无头跳转或点击
+          "f_mode": {
+            "action": "navigate",
+            "target_url": "https://developer.apple.com/account/resources/authkeys/list"
+          },
+          // D-Mode (导办)：UI 渲染指令
+          "d_mode": {
+            "action": "highlight",
+            "guide_text": "首先，请点击左侧导航栏的 'Keys' 进入密钥管理。",
+            "require_user_click": true
+          }
+        },
+        {
+          "step_id": "input_key_name",
+          "description": "输入密钥名称",
+          "locator": {
+            "selector": "input#key-name-input",
+            "semantic_label": "Key Name Input Field",
+            "nearby_text": "Enter a name for your key." // 用于 Soffset 漂移检测
+          },
+          "f_mode": {
+            "action": "input",
+            "value": "{{parameters.key_name}}" // 直接注入加密表单的变量
+          },
+          "d_mode": {
+            "action": "spotlight_input",
+            "guide_text": "请在这里输入你想好的密钥名称，例如 'Supabase Auth'。"
+          }
+        },
+        {
+          "step_id": "confirm_and_download",
+          "description": "确认注册并下载密钥文件",
+          "risk_level": "HIGH", // 触发 HITL (人类介入) 安全网关
+          "locator": {
+            "selector": "button.download-btn",
+            "semantic_label": "Download Key Button"
+          },
+          "f_mode": {
+            "action": "wait_for_human", // F模式在此强制降级暂停
+            "prompt": "密钥已生成。这是高敏感资产，请您亲自点击下载并妥善保管。"
+          },
+          "d_mode": {
+            "action": "highlight",
+            "guide_text": "太棒了！最后一步，点击这里下载你的 .p8 密钥文件。"
+          },
+          // 交付物归档 (List 3)
+          "outputs": {
+            "key_id": {"selector": ".key-id-value", "type": "string"},
+            "file_status": "downloaded"
+          }
+        },
+        {
+          "step_id": "handoff_to_supabase",
+          "description": "携带密钥 ID 跨域前往 Supabase 进行配置",
+          "type": "HANDOFF",
+          "target_domain": "supabase.com",
+          // 跨域任务令牌 (Context Anchor)
+          "context_anchor": {
+            "source_intent": "generate_auth_key",
+            "payload": {
+              "apple_key_id": "{{outputs.key_id}}",
+              "team_id": "{{account.team_id}}"
+            },
+            "next_suggested_intent": "configure_apple_login"
+          }
+        }
+      ]
     }
   ]
 }
-```
-## 4. A2A (Agent-to-Agent) Interface
-A semantic "Fast-Lane" optimized for external LLM Agents (e.g., OpenAI Operator, Claude Computer Use).
-
-semantic_bridge: Direct mapping for LLMs to bypass brittle CSS selectors and interact with high-level business logic.
-
-fallback_logic: Defines the recovery path when an external agent encounters a UI mismatch or timeout.
-
-```json
-"a2a_interface": {
-  "llm_support_vlm": true,
-  "hint_tokens": {
-    "submit_btn": "[data-testid='enroll-submit']",
-    "input_field": "[name='legal-entity-id']"
-  },
-  "error_recovery": {
-    "on_dom_change": "REQUEST_RESCAN_OR_DOWNGRADE",
-    "on_timeout": "ACTIVATE_GUIDE_MODE"
-  }
-}
-```
-## 5. Extensibility & Site-Specific Logic
-Allows platform owners to define custom business logic and regional compliance without breaking the global protocol standard.
-
-```json
-"extensions": {
-  "custom_site_logic": {
-    "biometric_required": false,
-    "regional_compliance": "GDPR-V2",
-    "partner_metadata": {
-      "integrated_with": ["Stripe", "Supabase", "Auth0"]
-    }
-  }
-}
-```
-## 6. Security & Authority Downgrade (ADDE)
-This core algorithm ensures safety by monitoring Semantic Drift ($S_{offset}$) between the current UI and the protocol definition.
-
-![Security & Authority Downgrade (ADDE) Formula](./formula_render.jpg)
-
-
-
-© 2026 SiteAgent Hybrid Project. Distributed under the MIT License.
-
